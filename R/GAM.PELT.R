@@ -1,6 +1,9 @@
 #Wrapper function to call the main GAM PELT function.
-#Function to run the changepoitn detection algorithm
-#library(mgcv)
+#Function to run the changepoint detection algorithm.
+
+#Load dependencies.
+source("class_input.R")
+source("GAM.PELT.class.R")
 
 #Function for the penalty decision.
 penalty_decision <- function(penalty, n, diffparam){
@@ -70,7 +73,6 @@ PELT <- function(df_in,n,minseglen,GAM_call,resp_var,pen.value,verbose){
      for (ii in 1:length(tmpt)){ 
        tmplike[ii] <- lastchangelike[tmpt[ii]] + cost_function((tmpt[ii]+1),tstar,df_in,GAM_call,resp_var,minseglen)+pen.value
      }
-   #   lastchangelike[tstar] <- min(tmplike,na.rm=TRUE) # minimum at changepoint prior to tstar
      lastchangelike[tstar] <- min(c(tmplike,cost_function(1,tstar,df_in,GAM_call,resp_var,minseglen)),na.rm=TRUE) # minimum at changepoint prior to tstar
      if(lastchangelike[tstar] == cost_function(1,tstar,df_in,GAM_call,resp_var,minseglen)){
        lastchangecpts[tstar]=0
@@ -79,8 +81,6 @@ PELT <- function(df_in,n,minseglen,GAM_call,resp_var,pen.value,verbose){
        cpt=tmpt[tmplike==lastchangelike[tstar]][1]
        lastchangecpts[tstar] <- cpt
      }
-   #   cpt=tmpt[tmplike==lastchangelike[tstar]][1]
-   #   lastchangecpts[tstar] <- cpt
      checklist=tmpt[tmplike<=lastchangelike[tstar]+pen.value]
      #Increase the progress loop if required.
      if (verbose == TRUE){
@@ -134,21 +134,6 @@ GAM.PELT <- function(df_in, formula, minseglen=5,penalty='MBIC',pen.value=0,verb
     GAM_call[[1]] <- quote(mgcv::gam)
     #Now add all the parameters.
     GAM_call[names(GAM_call_list)] <- GAM_call_list
-
-    # #If the GAM is modelling covariates set up the formula accordingly otherwise just use X/Y/T to model the data.
-    # #This formula is generic for any segments and will be used later for looking at the fit.
-    # #The same formula is defined in the cost function. 
-    # if (is.null(covs_list) == TRUE){
-
-    #    #Tensor product smooth. 
-    #    #eval(parse(text=paste('GAM_formula <- ',resp_var,' ~ te(U,V,T, d=c(2,1), bs=c("cr","cr"),k=c(sp_knots,t_knots))',sep='')))
-    #    eval(parse(text=paste('GAM_formula <- ',resp_var,' ~ s(U,V, bs="tp", k=5) + s(T, bs="cr", k=5) + ti(U,V,T, d=c(2,1), bs=c("tp","cr"), k=c(5,5))',sep='')))
-       
-    # } else {
-
-    #   eval(parse(text=paste('GAM_formula <- ',resp_var,' ~ s(U,V, bs="tp", k=5) + s(T, bs="cr", k=5) + ti(U,V,T, d=c(2,1), bs=c("tp","cr"), k=c(5,5))',paste(' + s(',covs_list,', bs="cr",k=5)',collapse=''),sep='')))
-
-    # }
 
     #Now determine the penalty - normally in the changepooint package n=length of time series, however for the spatio temporal data this will be n_ts by n_sites (I.e number of rows of the df to fit GAM to).
     #Get the penalty value based on the input to the function.
