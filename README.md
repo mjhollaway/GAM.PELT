@@ -68,6 +68,6 @@ cpts(cpts_out)
 
 The **data** folder also contains the daily aggregated air quality data from the Automatic Urban and Rural Network (AURN) used in the data application example of GAM-PELT. The folder contains 3 csv files with one for each of the key pollutants O\_3, NO\_2, and PM\_2.5. These data have be aggregated into daily means for the time period 1st February to 31st August 2020 and are ready for running with GAM-PELT. 
 
-The AURN data are freely available to download from the UK-AIR website and provided by the Department for the Environment and Rural Affairs (Defra). 
+The AURN data are freely available to download from the UK-AIR website and provided by the Department for the Environment and Rural Affairs (Defra) under the following attribution statement:
 
 :copyright: Crown copyright 2021 Defra via uk-air.defra.gov.uk, licensed under the [Open Government Licence][https://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/].
