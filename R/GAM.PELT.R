@@ -111,7 +111,7 @@ PELT <- function(df_in,n,minseglen,GAM_call,resp_var,pen.value,verbose){
 #This function executes the main call to PELT to fit the GAM and detect changes in the parameters.
 #This is now setup to run with the default settings of any GAM model that can go into mgcv.
 #If df_in and formula are not supplied the function will report that they are missing - function needs both to run. 
-GAM.PELT <- function(df_in, formula, minseglen=5,penalty='MBIC',pen.value=0,verbose=TRUE,family = gaussian(), weights = NULL, subset = NULL, 
+GAM.PELT <- function(df_in, formula, minseglen=5,penalty='BIC',pen.value=0,verbose=TRUE,family = gaussian(), weights = NULL, subset = NULL, 
                      na.action=na.omit, offset = NULL, method = "GCV.Cp", optimizer = c("outer", "newton"), control = list(), scale = 0, 
                      select = FALSE, knots = NULL, sp = NULL, min.sp = NULL, H = NULL, gamma = 1, fit = TRUE, paraPen = NULL, G = NULL, in.out = NULL, 
                      drop.unused.levels = TRUE, drop.intercept = NULL, nei = NULL, discrete = FALSE){
