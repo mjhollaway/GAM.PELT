@@ -53,11 +53,17 @@ The **data** folder provides the random seeds used in the GAM-PELT paper to prod
 source("GAM.PELT.R")
 source("SimStudies_spt.r")
 
+#Set a scenario you wish to produce and the seed for reproducibility.
+#The value of the seed just needs to be set here as the set.seed operation is performed in the simulation studies code itself.
+#The below example is for scenario 4b from the paper.
+SCENARIO <- '4b'
+seed     <- 1234
+
 #Generate the simulated dataset using a seed from the file.
-sim_ds < gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150),add_lag=FALSE)
+sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150),add_lag=FALSE)
 
 #Run GAM-PELT on the dataset.
-cpts_out <- GAM.PELT(sim_ds$data, formula='Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5))', penalty='BIC')
+cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC')
 
 #Get the changepoints.
 cpts(cpts_out)
