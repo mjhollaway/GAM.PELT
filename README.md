@@ -3,7 +3,7 @@ GAM.PELT has been designed to utilise generalised additive models (GAMs) in conj
 
 This a spatiotemporal changepoint method that utilises a generalised additive model (GAM) dependent on the 2D spatial location and the observation time to account for the underlying spatio-temporal process. The full likelihood of the GAM is used in conjunction with the Pruned Linear Exact Time (PELT) changepoint search algorithm to detect multiple changepoints across spatial locations in a computationally efficient manner. Although the method was conceived to detect changepoints in spatio temporal datasets it can be run using any GAM model structure as input.
 
-The repository contains 2 folders, **R** which contains all the R scripts to run the GAM-PELT method and **data** which contains the random seeds to replicate the simulation studies and the air quality data used in the application section of the GAM-PELT paper (under review). 
+The repository contains 2 folders, **R** which contains all the R scripts to run the GAM-PELT method and **data** which contains the random seeds to replicate the simulation studies and the air quality data used in the application section of the GAM-PELT paper [(Hollaway and Killick 2024)](https://doi.org/10.1007/s11222-024-10478-6). 
 
 # Running GAM-PELT
 
@@ -109,3 +109,7 @@ cpts_O3 <- GAM.PELT(sim_ds$data, formula='Poll_Value ~ s(U, V, bs = "tp", k = 5)
 cpts(cpts_O3)
 
 ```
+
+# References
+
+Hollaway, M.J., Killick, R. Detection of spatiotemporal changepoints: a generalised additive model approach. *Stat Comput* **34**, 162 (2024). https://doi.org/10.1007/s11222-024-10478-6
