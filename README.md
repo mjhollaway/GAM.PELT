@@ -64,6 +64,7 @@ The output is the GAM-PELT class which provides the following:
 - **GAM.form** : The GAM formula supplied to GAM-PELT
 - **param.est** : The fitted GAM coefficients for each segment based on
   the changepoint locations
+- **ncpts** : The total number of changepoints identified by GAM.PELT
 
 The GAM-PELT class is a standard S4 class with access to the various
 slots using the names above. E.g. cpts(GAM-PELT class) would output the
