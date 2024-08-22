@@ -102,9 +102,6 @@ simulated data for a given **SCENARIO** and run GAM_PELT is shown below.
 The simulated dataset in this example has 50 locations, 200 timesteps
 with true changpoints at 50,100 and 150.
 
-    source("GAM.PELT.R")
-    source("SimStudies_spt.r")
-
     #Set a scenario you wish to produce and the seed for reproducibility.
     #The value of the seed just needs to be set here as the set.seed operation is performed in the simulation studies code itself.
     #The below example is for scenario 4b from the paper.
