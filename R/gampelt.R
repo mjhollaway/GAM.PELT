@@ -97,11 +97,8 @@ GAM.PELT <- function(df_in=list(), formula=list(), minseglen=5,penalty='BIC',pen
   if (length(which((n_missing_col <= nrow(df_in) - 2) & (n_missing_col > 0))) > 0){
     message('NAs in dataset. Consider setting of na.action in GAM call or provide dataset with no missing data.')
   }
-  non_numeric_cols <- names(df_in[,all.vars(formula)])[which(sapply(df_in[,all.vars(formula)], class) != "numeric")]
-  if (length(non_numeric_cols) > 0){
-    err_msg <- paste('Only numeric data is allowed. The following columns of the input data have non-numeric data: ',
-                     paste(non_numeric_cols,collapse=','),sep='')
-    stop(err_msg)
+  if(!all(sapply(df_in[,all.vars(formula)],is.numeric))){
+    stop('Only numeric data is allowed. Please check input data frame for non-numeric data.')
   }
 
   #Final check, if any of the covariates (not response variable) are all identical, throw an error that the

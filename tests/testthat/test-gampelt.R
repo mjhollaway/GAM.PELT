@@ -149,7 +149,7 @@ for (dd in 1:length(ds_test_list)){
         })
       } else if (names(ds_test_list)[dd] == 'Non_Numeric'){
         test_that(paste0('Test #',t,':data=',names(ds_test_list)[dd]), {
-          expect_error(GAM.PELT(df_in=ds_test_list[[dd]],formula=GAM_formula_list[[gg]]),"Only numeric data is allowed. The following columns of the input data have non-numeric data: U")
+          expect_error(GAM.PELT(df_in=ds_test_list[[dd]],formula=GAM_formula_list[[gg]]),"Only numeric data is allowed. Please check input data frame for non-numeric data.")
           t <- t + 1
         })
       } else if (names(ds_test_list)[dd] == '1_Cov_same'){
