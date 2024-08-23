@@ -4,6 +4,8 @@
 # GAM.PELT
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/mjhollaway/GAM.PELT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mjhollaway/GAM.PELT/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 GAM.PELT has been designed to utilise generalised additive models (GAMs)
