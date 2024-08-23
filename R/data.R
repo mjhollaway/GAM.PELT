@@ -26,7 +26,6 @@
 #'   \item{SFNAME}{Site Name}
 #'   \item{STYPE}{Site type - will be one of Urban Background, Rural Background, Urban Traffic, Urban Industrial, Suburban Industrial or Suburban Background}
 #'   \item{Poll_Value}{Daily concentration of pollutant NO<sub>2</sub> in \eqn{\mu} gm<sup>-3</sup>}
-#'   ...
 #' }
 #' @source <https://uk-air.defra.gov.uk/data/data_selector>
 "AURN_NO2"
@@ -59,7 +58,6 @@
 #'   \item{SFNAME}{Site Name}
 #'   \item{STYPE}{Site type - will be one of Urban Background, Rural Background, Urban Traffic, Urban Industrial, Suburban Industrial or Suburban Background}
 #'   \item{Poll_Value}{Daily concentration of pollutant O<sub>3</sub> in \eqn{\mu} gm<sup>-3</sup>}
-#'   ...
 #' }
 #' @source <https://uk-air.defra.gov.uk/data/data_selector>
 "AURN_O3"
@@ -92,7 +90,33 @@
 #'   \item{SFNAME}{Site Name}
 #'   \item{STYPE}{Site type - will be one of Urban Background, Rural Background, Urban Traffic, Urban Industrial, Suburban Industrial or Suburban Background}
 #'   \item{Poll_Value}{Daily concentration of pollutant PM<sub>2.5</sub> in \eqn{\mu} gm<sup>-3</sup>}
-#'   ...
 #' }
 #' @source <https://uk-air.defra.gov.uk/data/data_selector>
 "AURN_PM"
+
+#' Random Seeds for simulation studies.
+#'
+#' @description
+#' Random seeds required to reproduce the datasets used in the simulation studies for the GAM-PELT paper.
+#' 100 replicates were run for each scenario in batches of 10. E.g. To reproduce Scenario 4b replicate 4
+#' extract the random seed from the following location in the data frame (SCEN='4b', BATCH=1, Replicate=Replicate_4).
+#' Or to reproduce Scenario 1a replicate 24 extract the random seed as follows (SCEN='1a', BATCH=3, Replicate=Replicate_4).
+#'
+#' @format ## 'SimStudies_rseeds'
+#' A data frame with 170 rows and 12 columns:
+#' \describe{
+#'   \item{SCEN}{Scenario}
+#'   \item{BATCH}{Batch}
+#'   \item{Replicate_1}{Random seed for 1st replicate in batch XX}
+#'   \item{Replicate_2}{Random seed for 2nd replicate in batch XX}
+#'   \item{Replicate_3}{Random seed for 3rd replicate in batch XX}
+#'   \item{Replicate_4}{Random seed for 4th replicate in batch XX}
+#'   \item{Replicate_5}{Random seed for 5th replicate in batch XX}
+#'   \item{Replicate_6}{Random seed for 6th replicate in batch XX}
+#'   \item{Replicate_7}{Random seed for 7th replicate in batch XX}
+#'   \item{Replicate_8}{Random seed for 8th replicate in batch XX}
+#'   \item{Replicate_9}{Random seed for 9th replicate in batch XX}
+#'   \item{Replicate_10}{Random seed for 10th replicate in batch XX}
+#' }
+#' @source This dataset was generated as part of the simulation studies to allow reproducibility of the simulations.
+"SimStudies_rseeds"

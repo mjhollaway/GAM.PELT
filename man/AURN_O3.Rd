@@ -18,7 +18,6 @@ A data frame with 6390 rows and 9 columns:
 \item{SFNAME}{Site Name}
 \item{STYPE}{Site type - will be one of Urban Background, Rural Background, Urban Traffic, Urban Industrial, Suburban Industrial or Suburban Background}
 \item{Poll_Value}{Daily concentration of pollutant O\if{html}{\out{<sub>}}3\if{html}{\out{</sub>}} in \eqn{\mu} gm\if{html}{\out{<sup>}}-3\if{html}{\out{</sup>}}}
-...
 }
 }
 }

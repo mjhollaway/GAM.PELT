@@ -77,15 +77,19 @@ print(cpts_out)
 
 The **data** folder provides the random seeds used in the GAM-PELT paper to produce the datasets simulation studies for the respective change (1a,1b,1c,2a,2b,2c,3a,3b,3c,4a and 4b) and no change scenarios (A--F). 100 replicates were run for each scenario with the csv file **Sim_study_rseeds_100reps.csv** containing the random seeds in batches of 10 for each scenario. Sample code is shown below how to reproduce the simulated data for a given **SCENARIO** and run GAM_PELT is shown below. The simulated dataset in this example has 50 locations, 200 timesteps with true changpoints at 50,100 and 150.
 
+The random seeds used in the GAM-PELT paper to produce the simulation study datasets are provided with this package for reproducibility. Seeds are provided for the respective change (1a,1b,1c,2a,2b,2c,3a,3b,3c,4a and 4b) and no change scenarios (A--F). 100 replicates were run for each scenario in batches of 10. The simulation studies in the paper each had 50 locations, 200 timesteps with true changpoints at 50,100 and 150. Sample code on how to reproduce the simulated data for a given **SCENARIO** and run GAM_PELT is shown below.
+
 ```
+data(SimStudies_rseeds)
+
 #Set a scenario you wish to produce and the seed for reproducibility.
-#The value of the seed just needs to be set here as the set.seed operation is performed in the simulation studies code itself.
 #The below example is for scenario 4b from the paper.
+#Here we are extracting the seed for replicate 1 (Batch 1, Replicate 1)
 SCENARIO <- '4b'
-seed     <- 1234
+seed     <- SimStudies_rseeds$Replicate_1[which((SimStudies_rseeds$SCEN == SCENARIO) & (SimStudies_rseeds$BATCH == 1))]
 
 #Generate the simulated dataset using a seed from the file.
-sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150),add_lag=FALSE)
+sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150))
 
 #Run GAM-PELT on the dataset.
 cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC')
@@ -93,6 +97,18 @@ cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, b
 #Get the changepoints.
 cpts(cpts_out)
 
+#Example to repeat the same as above but for SCENARIO A, replicate 35
+SCENARIO <- 'A'
+seed     <- SimStudies_rseeds$Replicate_5[which((SimStudies_rseeds$SCEN == SCENARIO) & (SimStudies_rseeds$BATCH == 4))]
+
+#Generate the simulated dataset using a seed from the file.
+sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150))
+
+#Run GAM-PELT on the dataset.
+cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC')
+
+#Get the changepoints.
+cpts(cpts_out)
 ```
 
 ## Data Application example
