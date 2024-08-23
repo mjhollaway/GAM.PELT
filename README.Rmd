@@ -1,0 +1,132 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# GAM.PELT
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+GAM.PELT has been designed to utilise generalised additive models (GAMs) in conjunction with the Pruned Linear Exact Time (PELT) changepoint detection algorithm to detect spatio-temporal changepoints in datasets.
+
+This a spatiotemporal changepoint method that utilises a generalised additive model (GAM) dependent on the 2D spatial location and the observation time to account for the underlying spatio-temporal process. The full likelihood of the GAM is used in conjunction with the Pruned Linear Exact Time (PELT) changepoint search algorithm to detect multiple changepoints across spatial locations in a computationally efficient manner. Although the method was conceived to detect changepoints in spatio temporal datasets it can be run using any GAM model structure as input.
+
+More information on the development of GAM.PELT can be found in the GAM-PELT paper [(Hollaway and Killick 2024)](https://doi.org/10.1007/s11222-024-10478-6).
+
+## Installation
+
+You can install the development version of GAM.PELT from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("mjhollaway/GAM.PELT")
+```
+
+## Example
+
+In order to run GAM-PELT load the package as follows after installation.
+
+```{r example}
+library(GAM.PELT)
+```
+
+The only required inputs to run GAM-PELT are a data frame containing the input dataset (**df_in**) and the formula of the GAM model to fit (**formula**). Optional inputs include the minimum segment length for changepoint detection (**minseglen**; default=5), the penalty to use with PELT (**penalty**; default=BIC, options=AIC, BIC, MBIC, Manual or NONE), penalty value (**pen.value**; default=0.0, only used when penalty is set to Manual) and whether to print progress of method to screen (**verbose**; default=TRUE). The method can also take any options available to the **gam** function in the **mgcv** package with all options set as the defaults.
+
+The output is the GAM-PELT class which provides the following: 
+
+- **data.set**  : The data frame containing the input data to GAM-PELT
+- **pen.type**  : The penalty type used in PELT
+- **pen.value** : The value of the penalty used in PELT
+- **minseglen** : The minimum segment length when changepoints are detected
+- **cpts**      : Changepoint locations calculated by GAM-PELT
+- **GAM.form**  : The GAM formula supplied to GAM-PELT
+- **param.est** : The fitted GAM coefficients for each segment based on the changepoint locations
+- **ncpts**     : The total number of changepoints identified by GAM.PELT
+
+The GAM-PELT class is a standard S4 class with access to the various slots using the names above. E.g. cpts(GAM-PELT class) would output the changepoint locations.
+
+
+Example code to run GAM-PELT to detect spatio temporal changepoints is shown below. Here the input dataframe is a quantity (Y) located in 2D space (U,V) and at time (T). Here the spatio-temporal process is modelled by a GAM with a 2D thin plate regression spline in space (U,V), a cubic regression spline in time (T) and a tensor interation over space and time. For this example the code is set to look for a minimum segment length of 10 and use the BIC penalty.
+
+```
+#Call GAM-PELT using the input dataframe df_in.
+cpts_out <- GAM.PELT(df_in, formula='Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5))', minseglen=10, penalty='BIC')
+
+#To access the changepoints estimated by GAM-PELT.
+cpts(cpts_out)
+
+#Or to access the penalty value used.
+pen.value(cpts_out)
+
+#Or to print a summary of the output to screen.
+print(cpts_out)
+
+```
+# Reproducing the simulation studies
+
+The **data** folder provides the random seeds used in the GAM-PELT paper to produce the datasets simulation studies for the respective change (1a,1b,1c,2a,2b,2c,3a,3b,3c,4a and 4b) and no change scenarios (A--F). 100 replicates were run for each scenario with the csv file **Sim_study_rseeds_100reps.csv** containing the random seeds in batches of 10 for each scenario. Sample code is shown below how to reproduce the simulated data for a given **SCENARIO** and run GAM_PELT is shown below. The simulated dataset in this example has 50 locations, 200 timesteps with true changpoints at 50,100 and 150.
+
+The random seeds used in the GAM-PELT paper to produce the simulation study datasets are provided with this package for reproducibility. Seeds are provided for the respective change (1a,1b,1c,2a,2b,2c,3a,3b,3c,4a and 4b) and no change scenarios (A--F). 100 replicates were run for each scenario in batches of 10. The simulation studies in the paper each had 50 locations, 200 timesteps with true changpoints at 50,100 and 150. Sample code on how to reproduce the simulated data for a given **SCENARIO** and run GAM_PELT is shown below.
+
+```
+data(SimStudies_rseeds)
+
+#Set a scenario you wish to produce and the seed for reproducibility.
+#The below example is for scenario 4b from the paper.
+#Here we are extracting the seed for replicate 1 (Batch 1, Replicate 1)
+SCENARIO <- '4b'
+seed     <- SimStudies_rseeds$Replicate_1[which((SimStudies_rseeds$SCEN == SCENARIO) & (SimStudies_rseeds$BATCH == 1))]
+
+#Generate the simulated dataset using a seed from the file.
+sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150))
+
+#Run GAM-PELT on the dataset.
+cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC')
+
+#Get the changepoints.
+cpts(cpts_out)
+
+#Example to repeat the same as above but for SCENARIO A, replicate 35
+SCENARIO <- 'A'
+seed     <- SimStudies_rseeds$Replicate_5[which((SimStudies_rseeds$SCEN == SCENARIO) & (SimStudies_rseeds$BATCH == 4))]
+
+#Generate the simulated dataset using a seed from the file.
+sim_ds <- gen_SimData(SCENARIO,seed,n_ts=200,n_sites=50,true_cpts=c(50,100,150))
+
+#Run GAM-PELT on the dataset.
+cpts_out <- GAM.PELT(sim_ds$data, formula=Y ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC')
+
+#Get the changepoints.
+cpts(cpts_out)
+```
+
+## Data Application example
+
+Example code is shown below to replicate the detection of changepoints in the O<sub>3</sub> time series shown in the GAM-PELT paper.
+
+```
+#Get the data.
+data(AURN_O3)
+
+#Run GAM-PELT
+cpts_O3 <- GAM.PELT(AURN_O3, formula=Poll_Value ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC', minseglen=15)
+
+#Output the changepoints
+cpts(cpts_O3)
+
+```
+
+## References
+
+Hollaway, M.J., Killick, R. Detection of spatiotemporal changepoints: a generalised additive model approach. *Stat Comput* **34**, 162 (2024). https://doi.org/10.1007/s11222-024-10478-6
