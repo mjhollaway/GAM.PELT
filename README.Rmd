@@ -95,6 +95,22 @@ cpts(cpts_out)
 
 ```
 
+## Data Application example
+
+Example code is shown below to replicate the detection of changepoints in the O<sub>3</sub> time series shown in the GAM-PELT paper.
+
+```
+#Get the data.
+data(AURN_O3)
+
+#Run GAM-PELT
+cpts_O3 <- GAM.PELT(AURN_O3, formula=Poll_Value ~ s(U, V, bs = "tp", k = 5) + s(T, bs = "cr", k = 5) + ti(U,V, T, d = c(2, 1), bs = c("tp", "cr"), k = c(5, 5)), penalty='BIC', minseglen=15)
+
+#Output the changepoints
+cpts(cpts_O3)
+
+```
+
 ## References
 
 Hollaway, M.J., Killick, R. Detection of spatiotemporal changepoints: a generalised additive model approach. *Stat Comput* **34**, 162 (2024). https://doi.org/10.1007/s11222-024-10478-6
